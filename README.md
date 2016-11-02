@@ -92,7 +92,7 @@ public interface MovieInfoService {
 }
 ```
 
-You can check my posts [Gson](https://github.com/Mindjet/Way2Android/blob/master/Git-Github/github-api.md#decode-data) and [Retrofit](https://github.com/Mindjet/Way2Android/blob/master/HttpClient/retrofit-en.md#interface) to see why we need these 2 things.
+*Check my posts [Gson](https://github.com/Mindjet/Way2Android/blob/master/Git-Github/github-api.md#decode-data) and [Retrofit](https://github.com/Mindjet/Way2Android/blob/master/HttpClient/retrofit-en.md#interface) to see why we need these 2 things.*
 
 ## Fetch and decode data
 `Retrofit` is good at this.
@@ -131,7 +131,7 @@ private void fetchMovieInfo(String url) {
 }
 ```
 
-See, we can simple get the data with `Retrofit` and decode the data with `GsonConverter`.
+See, we can simply get the data with `Retrofit` and decode the data with `GsonConverter`.
 
 ## Display Data
 Before using `RecyclerView`, we need a `RecyclerView.Adapter`, let's name it `FaceAdapter`:
@@ -174,7 +174,7 @@ public class FaceAdapter extends RecyclerView.Adapter<FaceAdapter.FaceViewHolder
 }
 ```
 
-You can fetch the image using url and show it on the `ImageView` with `Glide` in the method `onBindViewHolder`.
+Fetch the image using url and show it on the `ImageView` with `Glide` in the method `onBindViewHolder`.
 
 Now instantiate the `RecyclerView` and attach adapter to it:
 
@@ -185,7 +185,7 @@ mFaceAdapter = new FaceAdapter(this);
 mRecyclerView.setAdapter(mFaceAdapter);
 ```
 
-*You can check my repos [RecyclerView](https://github.com/Mindjet/Way2Android/blob/master/RecyclerView/recycler-view-1.md), [Glide](https://github.com/Mindjet/Way2Android/blob/master/ImageLoader/glide.md) and project [RecyclerView demo](https://github.com/Mindjet/RecyclerViewDemo).*
+*Check my repos [RecyclerView](https://github.com/Mindjet/Way2Android/blob/master/RecyclerView/recycler-view-1.md), [Glide](https://github.com/Mindjet/Way2Android/blob/master/ImageLoader/glide.md) and project [RecyclerView demo](https://github.com/Mindjet/RecyclerViewDemo).*
 
 Now run the app and see what happen now!  
 (Do remember to add `INTERNET` **permission** in your `AndroidManifest.xml`)
