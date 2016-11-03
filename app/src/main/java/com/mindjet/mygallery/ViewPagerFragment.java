@@ -1,6 +1,7 @@
 package com.mindjet.mygallery;
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -9,11 +10,10 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.mindjet.mygallery.Bean.MovieInfo;
+import com.mindjet.mygallery.databinding.FragmentFullscreenPageBinding;
 
 import java.util.List;
 
@@ -79,6 +79,7 @@ public class ViewPagerFragment extends DialogFragment {
 
         private List<MovieInfo> mMovieInfoList;
         private LayoutInflater mInflater;
+        private FragmentFullscreenPageBinding mPageBinding;
 
         void setMovieInfoList(List<MovieInfo> movieInfoList) {
             mMovieInfoList = movieInfoList;
@@ -88,13 +89,20 @@ public class ViewPagerFragment extends DialogFragment {
         public Object instantiateItem(ViewGroup container, int position) {
 
             mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = mInflater.inflate(R.layout.fragment_fullscreen_page, container, false);
-            ImageView imageView = (ImageView) view.findViewById(R.id.iv_fullscreen);
 
-            Glide.with(getActivity())
-                    .load(mMovieInfoList.get(position).url.large)
-                    .thumbnail(0.1f)
-                    .into(imageView);
+            //deprecated, use data binding instead.
+//            View view = mInflater.inflate(R.layout.fragment_fullscreen_page, container, false);
+//            ImageView imageView = (ImageView) view.findViewById(R.id.iv_fullscreen);
+//
+//            Glide.with(getActivity())
+//                    .load(mMovieInfoList.get(position).url.large)
+//                    .thumbnail(0.1f)
+//                    .into(imageView);
+
+            //data binding
+            mPageBinding = DataBindingUtil.inflate(mInflater, R.layout.fragment_fullscreen_page, container, false);
+            View view = mPageBinding.getRoot();
+            mPageBinding.setImgUrl(mMovieInfoList.get(position).url.large);
 
             container.addView(view);
             return view;
@@ -107,7 +115,7 @@ public class ViewPagerFragment extends DialogFragment {
 
         @Override
         public boolean isViewFromObject(View view, Object object) {
-            return view == ((View) object);
+            return view == object;
         }
 
         @Override

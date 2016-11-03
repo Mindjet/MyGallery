@@ -78,7 +78,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ArrayList<MovieInfo>> call, Response<ArrayList<MovieInfo>> response) {
                 if (response.isSuccessful()) {
-                    mMovieInfoList = response.body();
+                    ArrayList<MovieInfo> list = response.body();
+
+                    //make the data set bigger :)
+                    for (int i = 0; i < 5; i++) {
+                        mMovieInfoList.addAll(list);
+                    }
+
                     mFaceAdapter.setMovieInfoList(mMovieInfoList);
                 }
             }
