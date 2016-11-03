@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         mRetrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://api.github.com/")
+                .baseUrl("https://api.github.com/")         //It is required but will be ignored if the call is given absolute path
                 .build();
         mMovieInfoService = mRetrofit.create(MovieInfoService.class);
 

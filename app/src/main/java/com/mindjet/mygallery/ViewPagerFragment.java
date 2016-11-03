@@ -36,6 +36,7 @@ public class ViewPagerFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //make it fullscreen
         setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
     }
 
@@ -45,6 +46,7 @@ public class ViewPagerFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.fragment_fullscreen, container, false);
         mViewPager = (ViewPager) view.findViewById(R.id.vp_fullscreen);
+        mViewPager.setPageTransformer(true, new DepthPageTransformer());
         mTimeStamp = (TextView) view.findViewById(R.id.tv_time);
         mIndex = (TextView) view.findViewById(R.id.tv_index);
 
@@ -67,7 +69,7 @@ public class ViewPagerFragment extends DialogFragment {
     }
 
     private void setTheCurrentItem(int currentPos) {
-        mIndex.setText(currentPos + "/" + mMovieInfoList.size());
+        mIndex.setText(currentPos + 1 + "/" + mMovieInfoList.size());
         mTimeStamp.setText(mMovieInfoList.get(currentPos).timeStamp);
         mViewPager.setCurrentItem(currentPos);
     }
@@ -95,7 +97,6 @@ public class ViewPagerFragment extends DialogFragment {
                     .into(imageView);
 
             container.addView(view);
-
             return view;
         }
 
@@ -115,6 +116,7 @@ public class ViewPagerFragment extends DialogFragment {
         }
     }
 
+    //listener
     private class ViewPagerListener implements ViewPager.OnPageChangeListener {
 
         @Override
@@ -130,6 +132,52 @@ public class ViewPagerFragment extends DialogFragment {
         @Override
         public void onPageScrollStateChanged(int state) {
 
+        }
+    }
+
+    //transformer
+    private class DepthPageTransformer implements ViewPager.PageTransformer {
+
+        private final float MIN_SCALE = 0.8f;
+
+        @Override
+        public void transformPage(View page, float position) {
+            int pageWidth = page.getWidth();
+
+            if (position < -1) { // [-Infinity,-1)
+                // This page is way off-screen to the left.
+                page.setAlpha(0);
+
+            } else if (position <= 0) { // [-1,0]
+                // Use the default slide transition when moving to the left page
+                page.setAlpha(1);
+                page.setTranslationX(0);
+                page.setScaleX(1);
+                page.setScaleY(1);
+
+                // Scale the page (between MIN_SCALE and 1)
+                float scaleFactor = MIN_SCALE
+                        + (1 - MIN_SCALE) * (1 + position);
+                page.setScaleX(scaleFactor);
+                page.setScaleY(scaleFactor);
+
+                //Fade the page.
+                page.setAlpha(1 + position);
+
+            } else if (position <= 1) { // (0,1]
+                // Fade the page.
+                page.setAlpha(1 - position);
+
+                // Scale the page (between MIN_SCALE and 1)
+                float scaleFactor = MIN_SCALE
+                        + (1 - MIN_SCALE) * (1 - Math.abs(position));
+                page.setScaleX(scaleFactor);
+                page.setScaleY(scaleFactor);
+
+            } else { // (1,+Infinity]
+                // This page is way off-screen to the right.
+                page.setAlpha(0);
+            }
         }
     }
 
