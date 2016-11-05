@@ -193,5 +193,88 @@ Now run the app and see what happen now!
 <img src="screenshots/Home.gif" width="250" />
 
 ## Fullscreen
-Coming soon.
+### Build DialogFragment
+I use `DialogFragment` and `ViewPager` to implement fullscreen funtionality.
+
+Firstly, build a `DialogFragment` named `ViewPagerFragment`, in the method `onCreate`, make the fragment fullscreen:
+
+```Java
+setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+```
+
+### Instantiate ViewPager
+In the method `onCreateView` of `DialogFragment`, instantiate the `ViewPager` and attach `ViewPagerAdapter` to it. And you are supposed to set the current item here with method named `ViewPager.setCurrentItem(int currentPos)`.
+
+
+### Build ViewPagerAdapter
+In `ViewPagerAdapter`, we need to override several methods named `instantiateItem`, `isViewFromObject` and `destroyItem`.
+
+In `instantiateItem`, we instantiate the view and add it to the `container`, in `destroyItem` we remove the view from the `container`.
+
+### outcome
+<img src="screenshots/Page.gif" width="250"/>
+
+## Animation
+
+We can use `ViewPager.PageTransformer` to control the way the page changes. 
+
+Let me show the code first:
+
+```Java
+mViewPager.setPageTransformer(true, new DepthPageTransformer());
+
+...
+
+private class DepthPageTransformer implements ViewPager.PageTransformer {
+
+    private final float MIN_SCALE = 0.8f;
+
+    @Override
+    public void transformPage(View page, float position) {
+        int pageWidth = page.getWidth();
+
+        if (position < -1) { // [-Infinity,-1)
+            // This page is way off-screen to the left.
+            page.setAlpha(0);
+
+        } else if (position <= 0) { // [-1,0]
+            // Use the default slide transition when moving to the left page
+            page.setAlpha(1);
+            page.setTranslationX(0);
+            page.setScaleX(1);
+            page.setScaleY(1);
+
+            // Scale the page (between MIN_SCALE and 1)
+            float scaleFactor = MIN_SCALE
+                    + (1 - MIN_SCALE) * (1 + position);
+            page.setScaleX(scaleFactor);
+            page.setScaleY(scaleFactor);
+
+            //Fade the page.
+            page.setAlpha(1 + position);
+
+        } else if (position <= 1) { // (0,1]
+            // Fade the page.
+            page.setAlpha(1 - position);
+
+            // Scale the page (between MIN_SCALE and 1)
+            float scaleFactor = MIN_SCALE
+                    + (1 - MIN_SCALE) * (1 - Math.abs(position));
+            page.setScaleX(scaleFactor);
+            page.setScaleY(scaleFactor);
+
+        } else { // (1,+Infinity]
+            // This page is way off-screen to the right.
+            page.setAlpha(0);
+        }
+    }
+}
+```
+
+The parameter `position` represents the relative position of the current page and the screen. if look at the sketch below, you may have a better unstanding of what I am putting.
+
+<img src="screenshots/page-transformer.png" width="700">
+
+## More
+Thanks for your attention, if you like it, please be a stargazer of this repo.
 
