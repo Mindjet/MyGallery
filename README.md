@@ -211,7 +211,7 @@ In `ViewPagerAdapter`, we need to override several methods named `instantiateIte
 
 In `instantiateItem`, we instantiate the view and add it to the `container`, in `destroyItem` we remove the view from the `container`.
 
-### outcome
+### Check it out
 <img src="screenshots/Page.gif" width="250"/>
 
 ## Animation
@@ -271,7 +271,7 @@ private class DepthPageTransformer implements ViewPager.PageTransformer {
 }
 ```
 
-The parameter `position` represents the relative position of the current page and the screen. if look at the sketch below, you may have a better unstanding of what I am putting.
+The parameter `position` represents the relative position of the current page to the screen. If look at the sketch below, you may have a better unstanding of what I am putting.
 
 <img src="screenshots/page-transformer.png" width="700">
 
